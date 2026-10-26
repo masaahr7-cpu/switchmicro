@@ -1,0 +1,13 @@
+{
+  "projectId": "72380848",
+  "functions": {
+    "mail-proxy": {
+      "hasChanged": false,
+      "hash": "879eb7c19aa7410cada99b731060c86a7e3bbf372c7a7bfe958e60e1b10c4156"
+    },
+    "traccar-proxy": {
+      "hasChanged": false,
+      "hash": "a8132c52050da32dadba1a21d75487ac17edff4daf2e108f69789765d06d5e09"
+    }
+  }
+}

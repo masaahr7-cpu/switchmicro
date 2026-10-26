@@ -1,0 +1,7 @@
+[functions.mail-proxy]
+verify_jwt = false
+entrypoint = "./functions/mail-proxy/index.ts"
+
+[functions.traccar-proxy]
+verify_jwt = false
+entrypoint = "./functions/traccar-proxy/index.ts"

@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="/logo.png" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>Switch Mail — Switch Microfinance Ltd</title>
+<meta name="theme-color" content="#0A1E42" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E30613;--blue:#0B57D0;--blue-light:#C2E7FF;--blue-bg:#D3E3FD;
+  --navy:#0A1E42;--brand-blue:#1A4D9D;--bg:#F6F8FC;--white:#fff;
+  --gray-1:#F2F6FC;--gray-2:#E8EAED;--gray-3:#C4C7C5;--gray-4:#80868B;
+  --gray-5:#5F6368;--gray-6:#3C4043;--green:#1E8E3E;--green-dot:#34A853;
+  --shadow-sm:0 1px 3px rgba(60,64,67,.08);--shadow-md:0 1px 6px rgba(60,64,67,.14);
+  --shadow-lg:0 4px 24px rgba(60,64,67,.18);--radius:16px;
+  --font-sans:'Google Sans',Roboto,Arial,sans-serif;--font-body:Roboto,Arial,sans-serif;
+}
+html,body{height:100%;font-family:var(--font-body);background:var(--bg);color:var(--gray-6);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit}
+input{font-family:inherit;outline:none;border:none}
+a{color:var(--blue);text-decoration:none}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--gray-3);border-radius:6px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--gray-4)}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ===== LOGIN ===== */
+.login-shell{height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0A1E42 0%,#1A4D9D 100%);position:relative;overflow:hidden}
+.login-shell::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.05) 0,transparent 50%),radial-gradient(circle at 70% 80%,rgba(11,87,208,.15) 0,transparent 50%)}
+.login-card{position:relative;background:#fff;border-radius:24px;padding:48px 44px;width:min(460px,calc(100% - 32px));box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:1}
+.login-logo{display:flex;justify-content:center;margin-bottom:20px}
+.login-logo img{width:64px;height:64px;object-fit:contain}
+.login-title{text-align:center;font-family:var(--font-sans);font-size:24px;font-weight:500;color:var(--navy);margin-bottom:4px}
+.login-sub{text-align:center;font-size:14px;color:var(--gray-4);margin-bottom:32px}
+.login-input{width:100%;height:56px;padding:0 18px;border:1px solid var(--gray-2);border-radius:12px;font-size:16px;color:var(--gray-6);background:#F8F9FA;transition:border .2s,box-shadow .2s}
+.login-input:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(11,87,208,.12);background:#fff}
+.login-input + .login-input{margin-top:14px}
+.login-btn{width:100%;height:48px;background:var(--blue);color:#fff;border-radius:28px;font-family:var(--font-sans);font-size:15px;font-weight:500;margin-top:28px;transition:background .2s,transform .1s;letter-spacing:.3px}
+.login-btn:hover{background:#0A4DBD}
+.login-btn:active{transform:scale(.98)}
+.login-btn:disabled{opacity:.6;cursor:wait}
+.login-error{margin-top:16px;padding:12px 16px;background:#FCE8E6;border-radius:8px;color:#C5221F;font-size:13px;display:none}
+.login-error.show{display:block}
+.login-hint{text-align:center;margin-top:20px;font-size:12px;color:var(--gray-4)}
+.login-hint a{font-weight:500}
+.login-mode-badge{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:5px 12px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.05em}
+
+/* ===== APP SHELL ===== */
+.app-shell{display:none;height:100vh;flex-direction:column;background:var(--bg)}
+.app-shell.show{display:flex}
+
+/* ===== HEADER ===== */
+.gmail-header{height:64px;display:flex;align-items:center;gap:12px;padding:0 16px;background:#fff;border-bottom:1px solid var(--gray-2);flex-shrink:0;z-index:10}
+.header-logo{display:flex;align-items:center;gap:10px;min-width:220px}
+.header-logo img{width:40px;height:40px;object-fit:contain}
+.header-logo span{font-family:var(--font-sans);font-size:22px;color:var(--gray-6);font-weight:400}
+.header-search{flex:1;max-width:720px;height:48px;background:var(--gray-1);border-radius:28px;display:flex;align-items:center;padding:0 20px;gap:12px;transition:background .2s,box-shadow .2s}
+.header-search:hover{background:#EAEFF7;box-shadow:var(--shadow-sm)}
+.header-search svg{color:var(--gray-4);flex-shrink:0}
+.header-search input{flex:1;font-size:15px;color:var(--gray-6);background:transparent}
+.header-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.header-icon-btn{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gray-5);transition:background .2s}
+.header-icon-btn:hover{background:var(--gray-1)}
+.header-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px var(--gray-3);position:relative}
+.header-avatar-wrap{position:relative}
+.header-avatar-dot{position:absolute;bottom:0;right:0;width:12px;height:12px;background:var(--green-dot);border-radius:50%;border:2px solid #fff}
+
+/* ===== BODY ===== */
+.gmail-body{display:flex;flex:1;overflow:hidden}
+
+/* ===== SIDEBAR ===== */
+.gmail-sidebar{width:256px;flex-shrink:0;padding:8px 8px 80px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.compose-btn{height:56px;display:flex;align-items:center;gap:14px;padding:0 24px;background:var(--blue-light);border-radius:16px;font-family:var(--font-sans);font-size:14px;font-weight:500;color:var(--gray-6);margin-bottom:8px;transition:box-shadow .2s,background .2s;align-self:flex-start}
+.compose-btn:hover{box-shadow:var(--shadow-md);background:#B8DCFF}
+.compose-btn svg{flex-shrink:0}
+.nav-item{height:40px;display:flex;align-items:center;gap:18px;padding:0 12px 0 26px;border-radius:0 16px 16px 0;font-size:14px;color:var(--gray-6);transition:background .15s;position:relative;user-select:none}
+.nav-item:hover{background:var(--gray-1)}
+.nav-item.active{background:var(--blue-bg);font-weight:700}
+.nav-item.active .nav-count{font-weight:700}
+.nav-item svg{flex-shrink:0;color:var(--gray-5)}
+.nav-item.active svg{color:var(--gray-6)}
+.nav-count{margin-left:auto;font-size:12px;color:var(--gray-5)}
+.nav-count.unread{color:var(--red);font-weight:700}
+.nav-divider{height:1px;background:var(--gray-2);margin:8px 16px}
+.nav-label{padding:4px 26px;font-size:12px;font-weight:500;color:var(--gray-4)}
+
+/* ===== INBOX LIST ===== */
+.inbox-pane{width:400px;flex-shrink:0;border-right:1px solid var(--gray-2);overflow-y:auto;background:#fff;display:flex;flex-direction:column}
+.inbox-toolbar{height:52px;display:flex;align-items:center;gap:4px;padding:0 12px;border-bottom:1px solid var(--gray-2);flex-shrink:0}
+.toolbar-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gray-5);transition:background .15s}
+.toolbar-btn:hover{background:var(--gray-1)}
+.toolbar-count{font-size:13px;color:var(--gray-5);margin-left:auto;margin-right:8px}
+.email-row{display:flex;align-items:flex-start;gap:10px;padding:8px 16px 8px 12px;cursor:pointer;border-bottom:1px solid transparent;transition:background .1s,box-shadow .1s;position:relative;min-height:56px}
+.email-row:hover{background:var(--gray-1);box-shadow:inset 1px 0 0 var(--gray-3)}
+.email-row.selected{background:var(--blue-bg);box-shadow:inset 3px 0 0 var(--blue)}
+.email-row.unread{font-weight:700;background:#F2F6FC}
+.email-row.unread.selected{background:var(--blue-bg)}
+.email-check{width:20px;height:20px;margin-top:2px;flex-shrink:0;opacity:0;transition:opacity .15s}
+.email-row:hover .email-check,.email-row.selected .email-check{opacity:1}
+.email-avatar{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#fff;margin-top:2px}
+.email-content{flex:1;min-width:0}
+.email-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.email-sender{font-size:14px;color:var(--gray-6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:inherit}
+.email-time{font-size:11px;color:var(--gray-4);flex-shrink:0;font-weight:400}
+.email-subject{font-size:13px;color:var(--gray-6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;font-weight:inherit}
+.email-preview{font-size:12px;color:var(--gray-4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.email-badges{display:flex;align-items:center;gap:4px;margin-top:4px}
+.badge-new{background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.04em}
+.badge-star{color:#F4B400}
+
+/* ===== READING PANE ===== */
+.read-pane{flex:1;overflow-y:auto;background:#fff;padding:0;display:flex;flex-direction:column}
+.read-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:var(--gray-4)}
+.read-empty img{width:80px;height:80px;opacity:.3}
+.read-empty p{font-size:14px}
+.read-header{padding:20px 32px 16px;border-bottom:1px solid var(--gray-2);flex-shrink:0}
+.read-subject{font-family:var(--font-sans);font-size:22px;font-weight:500;color:var(--gray-6);margin-bottom:16px;letter-spacing:-.3px}
+.read-meta{display:flex;align-items:flex-start;gap:14px}
+.read-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;color:#fff;flex-shrink:0}
+.read-info{flex:1;min-width:0}
+.read-from{font-size:14px;font-weight:700;color:var(--gray-6)}
+ read-email-addr{font-size:12px;color:var(--gray-4)}
+.read-to{font-size:12px;color:var(--gray-4);margin-top:2px}
+.read-time{font-size:12px;color:var(--gray-4);white-space:nowrap}
+.read-body{padding:24px 32px 40px;font-size:14px;line-height:1.7;color:var(--gray-6);overflow-x:hidden}
+.read-body p{margin-bottom:14px}
+.read-body h3{font-size:16px;font-weight:600;margin:18px 0 10px;color:var(--navy)}
+.read-body ul{margin:8px 0 14px 20px}
+.read-body li{margin-bottom:6px}
+.read-body strong{color:var(--navy)}
+.loan-box{background:#E8F0FE;border-radius:12px;padding:18px 22px;margin:18px 0;border-left:4px solid var(--blue)}
+.loan-box-title{font-weight:700;color:var(--blue);font-size:14px;margin-bottom:6px}
+.loan-box-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px}
+.loan-box-row span:first-child{color:var(--gray-5)}
+.loan-box-row span:last-child{font-weight:600;color:var(--gray-6)}
+.read-actions{display:flex;gap:8px;padding:12px 32px;border-top:1px solid var(--gray-2);flex-wrap:wrap}
+.read-action-btn{height:36px;padding:0 16px;border-radius:18px;background:var(--gray-1);font-size:13px;font-weight:500;color:var(--gray-6);display:flex;align-items:center;gap:8px;transition:background .15s}
+.read-action-btn:hover{background:var(--gray-2)}
+
+/* ===== BOTTOM BAR ===== */
+.signed-bar{position:fixed;bottom:0;left:0;right:0;height:auto;background:#fff;border-top:1px solid var(--gray-2);padding:8px 16px;display:flex;align-items:center;gap:12px;z-index:50;box-shadow:0 -2px 8px rgba(0,0,0,.06)}
+.signed-avatar-wrap{position:relative;flex-shrink:0}
+.signed-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 0 0 1px var(--gray-3)}
+.signed-avatar-dot{position:absolute;bottom:-2px;right:-2px;width:12px;height:12px;background:var(--green-dot);border-radius:50%;border:2px solid #fff}
+.signed-info{flex:1;min-width:0}
+.signed-email{font-size:11px;color:var(--gray-6);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.signed-status{font-size:10px;color:var(--gray-4);display:flex;align-items:center;gap:5px;margin-top:2px}
+.signed-dot{width:8px;height:8px;background:var(--green-dot);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.signed-storage{flex-shrink:0;width:140px}
+.storage-track{height:4px;background:var(--gray-2);border-radius:2px;overflow:hidden}
+.storage-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .5s}
+.storage-text{font-size:9px;color:var(--gray-4);margin-top:3px;white-space:nowrap}
+.signed-footer{font-size:9px;color:var(--gray-4);flex-shrink:0;padding-left:8px;border-left:1px solid var(--gray-2)}
+
+/* ===== COMPOSE MODAL ===== */
+.compose-overlay{position:fixed;bottom:0;right:24px;width:560px;max-width:calc(100vw - 32px);background:#fff;border-radius:12px 12px 0 0;box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:100;display:flex;flex-direction:column;animation:composeIn .2s ease}
+@keyframes composeIn{from{transform:translateY(40px);opacity:.8}to{transform:translateY(0);opacity:1}}
+.compose-header{background:#404040;color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:12px 12px 0 0}
+.compose-title{font-size:14px;font-weight:500}
+.compose-actions{display:flex;gap:4px}
+.compose-actions button{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;opacity:.8;transition:opacity .15s,background .15s}
+.compose-actions button:hover{opacity:1;background:rgba(255,255,255,.15)}
+.compose-field{padding:0 16px}
+.compose-field input{width:100%;height:44px;border-bottom:1px solid var(--gray-2);font-size:14px;color:var(--gray-6);background:transparent}
+.compose-field input:focus{border-bottom-color:var(--blue)}
+.compose-body{padding:12px 16px;flex:1}
+.compose-body textarea{width:100%;min-height:200px;border:none;resize:none;font-size:14px;line-height:1.6;color:var(--gray-6);font-family:var(--font-body);outline:none;background:transparent}
+.compose-footer{padding:8px 16px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--gray-2)}
+.compose-send{height:36px;padding:0 24px;background:var(--blue);color:#fff;border-radius:18px;font-size:14px;font-weight:500;transition:background .2s}
+.compose-send:hover{background:#0A4DBD}
+.compose-send:disabled{opacity:.6}
+.compose-footer button.icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gray-5);transition:background .15s}
+.compose-footer button.icon:hover{background:var(--gray-1)}
+
+/* ===== MOBILE ===== */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:80px;background:#fff;border-top:1px solid var(--gray-2);z-index:50;box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.mobile-nav-items{display:flex;height:100%;align-items:center;justify-content:space-around;padding-bottom:12px}
+.mobile-nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--gray-4);padding:8px 20px;border-radius:20px;transition:background .15s}
+.mobile-nav-item.active{color:var(--blue);background:var(--blue-bg)}
+.fab-compose{display:none;position:fixed;bottom:96px;right:16px;width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;align-items:center;justify-content:center;z-index:55;box-shadow:0 4px 16px rgba(11,87,208,.35);transition:transform .15s}
+.fab-compose:active{transform:scale(.92)}
+
+@media(max-width:1024px){
+  .read-pane{display:none}
+  .inbox-pane{width:100%;flex:1;border-right:none}
+}
+@media(max-width:768px){
+  .gmail-sidebar{display:none}
+  .header-logo{min-width:auto}
+  .header-logo span{display:none}
+  .header-search{max-width:none}
+  .mobile-nav{display:block}
+  .fab-compose{display:flex}
+  .app-shell{padding-bottom:80px}
+  .signed-bar{display:none}
+  .compose-overlay{right:0;left:0;bottom:80px;width:100%;max-width:none;border-radius:12px 12px 0 0}
+  .read-pane.show-mobile{display:flex;position:fixed;inset:0;z-index:60;background:#fff}
+}
+</style>
+</head>
+<body>
+
+<div id="login" class="login-shell">
+  <div class="login-mode-badge" id="modeBadge">DEMO MODE</div>
+  <div class="login-card">
+    <div class="login-logo"><img src="/logo.png" alt="Switch Microfinance" /></div>
+    <h1 class="login-title">Switch Microfinance</h1>
+    <p class="login-sub">Sign in to your Switch Mail account</p>
+    <form id="loginForm">
+      <input class="login-input" type="email" id="loginEmail" placeholder="Email address" required autocomplete="email" />
+      <input class="login-input" type="password" id="loginPass" placeholder="Password" required autocomplete="current-password" />
+      <div class="login-error" id="loginError"></div>
+      <button class="login-btn" type="submit" id="loginBtn">Sign In</button>
+    </form>
+    <p class="login-hint">Use your <strong>mail.switchmicrofinance.co.tz</strong> credentials.<br/>Demo mode allows any login.</p>
+  </div>
+</div>
+
+<div id="app" class="app-shell">
+  <!-- HEADER -->
+  <header class="gmail-header">
+    <div class="header-logo">
+      <img src="/logo.png" alt="Switch Mail" />
+      <span>Mail</span>
+    </div>
+    <div class="header-search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M10 2a8 8 0 105.29 14.01l5.35 5.35 1.42-1.42-5.35-5.35A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" fill="currentColor"/></svg>
+      <input type="text" id="searchInput" placeholder="Search mail" />
+    </div>
+    <div class="header-right">
+      <button class="header-icon-btn" title="Support"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 110-16 8 8 0 010 16zm-.5-13h-1v6l5.25 3.15.5-.82-4.75-2.83V7z" fill="currentColor"/></svg></button>
+      <button class="header-icon-btn" title="Settings"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 8a4 4 0 100 8 4 4 0 000-8zm0 6a2 2 0 110-4 2 2 0 010 4zm9-2a7.5 7.5 0 00-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 00-2-1.2l-.4-2.5h-4l-.4 2.5a7 7 0 00-2 1.2l-2.3-1-2 3.4 2 1.5a7.5 7.5 0 000 2.4l-2 1.5 2 3.4 2.3-1a7 7 0 002 1.2l.4 2.5h4l.4-2.5a7 7 0 002-1.2l2.3 1 2-3.4-2-1.5c.06-.4.1-.8.1-1.2z" fill="currentColor"/></svg></button>
+      <div class="header-avatar-wrap">
+        <img class="header-avatar" id="headerAvatar" src="/logo.png" alt="Profile" />
+        <div class="header-avatar-dot"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="gmail-body">
+    <!-- SIDEBAR -->
+    <aside class="gmail-sidebar">
+      <button class="compose-btn" id="composeBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 000-1.41l-2.34-2.34a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg>
+        Compose
+      </button>
+      <div class="nav-item active" data-folder="inbox">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V8h14v11z" fill="currentColor"/></svg>
+        Inbox <span class="nav-count unread" id="inboxCount">12</span>
+      </div>
+      <div class="nav-item" data-folder="starred">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="currentColor"/></svg>
+        Starred
+      </div>
+      <div class="nav-item" data-folder="snoozed">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7.88 3.39L6.6 1.86 2 5.71l1.29 1.53 4.59-3.85zM22 5.72l-4.6-3.86-1.29 1.53 4.6 3.86L22 5.72zM12 4a9 9 0 100 18 9 9 0 000-18zm0 16a7 7 0 110-14 7 7 0 010 14zm-.75-11h1.5v4.5l3.75 2.25-.75 1.23L10.25 13V9z" fill="currentColor"/></svg>
+        Snoozed
+      </div>
+      <div class="nav-item" data-folder="sent">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="currentColor"/></svg>
+        Sent
+      </div>
+      <div class="nav-item" data-folder="drafts">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 18.5v-13a1 1 0 011-1h12l5 5v9a1 1 0 01-1 1H4a1 1 0 01-1-1zM6 14h12v-2H6v2zm0-4h8V8H6v2z" fill="currentColor"/></svg>
+        Drafts
+      </div>
+      <div class="nav-item" data-folder="important">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L1 21h22L12 2zm0 4l7.53 13H4.47L12 6z" fill="currentColor"/></svg>
+        Important
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-label">Labels</div>
+      <div class="nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="6" fill="#1A4D9D"/></svg> Loans</div>
+      <div class="nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="6" fill="#E30613"/></svg> Finance</div>
+      <div class="nav-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="6" fill="#34A853"/></svg> Reports</div>
+    </aside>
+
+    <!-- INBOX LIST -->
+    <div class="inbox-pane" id="inboxPane">
+      <div class="inbox-toolbar">
+        <button class="toolbar-btn" title="Refresh"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17.65 6.35A7.96 7.96 0 0012 4a8 8 0 108 8h-2a6 6 0 11-1.76-4.24L13 11h7V4l-2.35 2.35z" fill="currentColor"/></svg></button>
+        <button class="toolbar-btn" title="Select all"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 5h2v2H3V5zm4 0h14v2H7V5zM3 11h2v2H3v-2zm4 0h14v2H7v-2zM3 17h2v2H3v-2zm4 0h14v2H7v-2z" fill="currentColor"/></svg></button>
+        <button class="toolbar-btn" title="Archive"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.54 5.23l-1.39-1.68a1 1 0 00-.77-.37H5.62a1 1 0 00-.77.37L3.46 5.23a1 1 0 00-.21.62V19a2 2 0 002 2h14a2 2 0 002-2V5.85a1 1 0 00-.21-.62zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z" fill="currentColor"/></svg></button>
+        <button class="toolbar-btn" title="Delete"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/></svg></button>
+        <span class="toolbar-count" id="toolbarCount">1–12 of 12</span>
+      </div>
+      <div id="emailList"></div>
+    </div>
+
+    <!-- READING PANE -->
+    <div class="read-pane" id="readPane">
+      <div class="read-empty" id="readEmpty">
+        <img src="/logo.png" alt="" />
+        <p>Select an email to read</p>
+      </div>
+      <div id="readContent" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM SIGNED-IN BAR -->
+  <div class="signed-bar">
+    <div class="signed-avatar-wrap">
+      <img class="signed-avatar" src="/logo.png" alt="Signed in" />
+      <div class="signed-avatar-dot"></div>
+    </div>
+    <div class="signed-info">
+      <div class="signed-email" id="signedEmail">jane.kumar@switchmicrofinance.co.tz</div>
+      <div class="signed-status"><span class="signed-dot"></span> Signed in &bull; Active</div>
+    </div>
+    <div class="signed-storage">
+      <div class="storage-track"><div class="storage-fill" style="width:41%"></div></div>
+      <div class="storage-text">8.2 GB of 20 GB</div>
+    </div>
+    <div class="signed-footer">Powered by Masaa24 Networks</div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-items">
+    <div class="mobile-nav-item active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" fill="currentColor"/></svg>Mail</div>
+    <div class="mobile-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2z" fill="currentColor"/></svg>Chat</div>
+    <div class="mobile-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 3a3 3 0 110 6 3 3 0 010-6z" fill="currentColor"/></svg>Spaces</div>
+    <div class="mobile-nav-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 10.5V7a5 5 0 00-10 0v3.5A2.5 2.5 0 004.5 13v5A2.5 2.5 0 007 20.5h10a2.5 2.5 0 002.5-2.5v-5a2.5 2.5 0 00-2.5-2.5z" fill="currentColor"/></svg>Meet</div>
+  </div>
+</div>
+
+<!-- FAB COMPOSE -->
+<button class="fab-compose" id="fabCompose"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 000-1.41l-2.34-2.34a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></svg></button>
+
+<script>
+const MAIL_API_URL='https://eqjagobmirujkmlqopbm.supabase.co/functions/v1/mail-proxy';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxamFnb2JtaXJ1amttbHFvcGJtIiwiaWF0IjoxNzkyOTQ5MzM2LCJleHAiOjIxMDg1MjUzMzN9.WP92WFtVJHis1EtsgfwG8STlAjD3NjwZ9igvdrf8VUE';
+const DEMO_MODE=false;
+
+var avatarColors={'#0B57D0':'#0B57D0','#1A4D9D':'#1A4D9D','#E30613':'#E30613','#0A1E42':'#0A1E42','#34A853':'#34A853','#F4B400':'#F4B400'};
+var colors=['#0B57D0','#1A4D9D','#E30613','#0A1E42','#34A853','#F4B400','#7B1FA2','#00695C'];
+
+var mockEmails=[
+  {id:1,sender:'Collin Joseph',email:'collin.joseph@switchmicrofinance.co.tz',subject:'Project Funding Approved — Q4 2026',preview:'The board has approved the Q4 funding allocation for the Mbeya branch expansion program...',time:'9:42 AM',date:'Oct 25',unread:true,starred:true,body:'<p>Dear team,</p><h3>Q4 Project Funding — Approved</h3><p>The board has officially approved the Q4 2026 funding allocation for the Mbeya branch expansion program. This is a major milestone for Switch Microfinance as we continue to grow our footprint across southern Tanzania.</p><div class="loan-box"><div class="loan-box-title">Funding Summary</div><div class="loan-box-row"><span>Approved Amount</span><span>TZS 45,000,000</span></div><div class="loan-box-row"><span>Disbursement Date</span><span>Nov 5, 2026</span></div><div class="loan-box-row"><span>Branch</span><span>Mbeya Main</span></div><div class="loan-box-row"><span>Term</span><span>36 months</span></div></div><p>Key highlights:</p><ul><li><strong>Branch expansion:</strong> New office space in Soko Matola</li><li><strong>Staffing:</strong> 4 new loan officers to be hired</li><li><strong>Target clients:</strong> 500 new micro-loan customers by Q1 2027</li></ul><p>Please review the attached disbursement schedule and confirm your department budgets by end of week.</p><p>Best regards,<br/><strong>Collin Joseph</strong><br/>CEO / MD, Switch Microfinance Ltd</p>'},
+  {id:2,sender:'Loan Disbursement',email:'disbursement@switchmicrofinance.co.tz',subject:'Loan Disbursement Confirmation — CUS-0884291',preview:'A loan of TZS 3,500,000 has been successfully disbursed to Grace Mushi for business expansion...',time:'8:15 AM',date:'Oct 25',unread:true,starred:false,body:'<p>Disbursement notification from the loan management system.</p><div class="loan-box"><div class="loan-box-title">Disbursement Details</div><div class="loan-box-row"><span>Customer</span><span>Grace Mushi</span></div><div class="loan-box-row"><span>Customer No.</span><span>CUS-0884291</span></div><div class="loan-box-row"><span>Loan Amount</span><span>TZS 3,500,000</span></div><div class="loan-box-row"><span>Interest Rate</span><span>18% p.a.</span></div><div class="loan-box-row"><span>Term</span><span>12 months</span></div><div class="loan-box-row"><span>Monthly Payment</span><span>TZS 322,140</span></div><div class="loan-box-row"><span>Disbursed On</span><span>Oct 25, 2026</span></div></div><p>The funds have been transferred to the customer mobile wallet (+255 765 407 407). The loan is now active and the first repayment is due on November 25, 2026.</p><p><strong>Branch:</strong> Mbeya Main<br/><strong>Approved by:</strong> Collin Joseph (CEO/MD)</p>'},
+  {id:3,sender:'Finance Reports',email:'reports@switchmicrofinance.co.tz',subject:'Monthly Report — September 2026 Portfolio Summary',preview:'The September portfolio report is ready. Total disbursed: TZS 127.5M, active loans: 340, PAR: 2.1%...',time:'Yesterday',date:'Oct 24',unread:true,starred:false,body:'<p>Monthly portfolio report for September 2026 is now available.</p><h3>Portfolio Summary</h3><div class="loan-box"><div class="loan-box-title">September 2026 Key Metrics</div><div class="loan-box-row"><span>Gross Disbursed</span><span>TZS 127,500,000</span></div><div class="loan-box-row"><span>Active Loans</span><span>340</span></div><div class="loan-box-row"><span>Collections Posted</span><span>TZS 98,200,000</span></div><div class="loan-box-row"><span>PAR (Portfolio at Risk)</span><span>2.1%</span></div><div class="loan-box-row"><span>KYC Completion</span><span>87%</span></div><div class="loan-box-row"><span>New Customers</span><span>42</span></div></div><p>The portfolio remains healthy with strong collection rates. The PAR has decreased from 2.8% in August to 2.1%, reflecting improved recovery efforts by the Mbeya team.</p><p>Full report attached. Please review before the monthly board meeting.</p><p>Finance Department<br/>Switch Microfinance Ltd</p>'},
+  {id:4,sender:'Amina Mollel',email:'amina.mollel@switchmicrofinance.co.tz',subject:'Re: Staff Schedule — Mbeya Branch Roster',preview:'Updated roster for next week is attached. Please confirm your shifts by Friday...',time:'Yesterday',date:'Oct 24',unread:false,starred:false,body:'<p>Hi everyone,</p><p>Please find the updated staff roster for next week (Oct 28 — Nov 1) attached. Key changes:</p><ul><li>Daniel Mushi will cover the front desk Monday-Wednesday</li><li>Grace John on field visits Tuesday and Thursday</li><li>Friday is a half-day for all staff — branch closes at 1 PM</li></ul><p>Please confirm your shifts by end of day Friday.</p><p>Thanks,<br/>Amina Mollel<br/>Branch Manager, Mbeya Main</p>'},
+  {id:5,sender:'Daniel Mushi',email:'daniel.mushi@switchmicrofinance.co.tz',subject:'New Client Registration — Joseph Mwambene',preview:'New client Joseph Mwambene has been registered and is pending KYC approval. Loan request: TZS 2,000,000...',time:'Oct 23',date:'Oct 23',unread:false,starred:false,body:'<p>A new client has been registered in the system and is awaiting KYC approval.</p><div class="loan-box"><div class="loan-box-title">New Client Details</div><div class="loan-box-row"><span>Full Name</span><span>Joseph Mwambene</span></div><div class="loan-box-row"><span>Phone</span><span>+255 715 882 334</span></div><div class="loan-box-row"><span>Occupation</span><span>Small business owner</span></div><div class="loan-box-row"><span>Loan Requested</span><span>TZS 2,000,000</span></div><div class="loan-box-row"><span>Purpose</span><span>Shop inventory expansion</span></div></div><p>The client visited the Mbeya Main branch today and completed the initial registration. KYC documents have been uploaded. Please review and approve at your earliest convenience.</p><p>Daniel Mushi<br/>Loan Officer</p>'},
+  {id:6,sender:'Grace John',email:'grace.john@switchmicrofinance.co.tz',subject:'Overdue Loan Follow-up — 3 Accounts',preview:'Three loans are now 15+ days overdue. I have contacted all borrowers and scheduled follow-up visits...',time:'Oct 22',date:'Oct 22',unread:false,starred:false,body:'<p>Overdue loan follow-up report for this week.</p><div class="loan-box"><div class="loan-box-title">Overdue Accounts</div><div class="loan-box-row"><span>Account 1</span><span>CUS-0821003 — 18 days overdue</span></div><div class="loan-box-row"><span>Account 2</span><span>CUS-0845127 — 22 days overdue</span></div><div class="loan-box-row"><span>Account 3</span><span>CUS-0862340 — 15 days overdue</span></div></div><p>I have personally contacted all three borrowers by phone. Two have committed to payment by end of week. The third (CUS-0845127) is unresponsive and I have scheduled a field visit for Thursday.</p><p>Grace John<br/>Recovery Officer, Mbeya Main</p>'},
+  {id:7,sender:'Switch IT Support',email:'it@switchmicrofinance.co.tz',subject:'Scheduled Maintenance — Mail Server Update',preview:'The mail server will undergo scheduled maintenance on Saturday Oct 28 from 2 AM to 4 AM...',time:'Oct 21',date:'Oct 21',unread:false,starred:false,body:'<p>Scheduled maintenance notice for the Switch Microfinance mail server.</p><p>The mail server at <strong>mail.switchmicrofinance.co.tz</strong> will undergo scheduled maintenance on:</p><div class="loan-box"><div class="loan-box-title">Maintenance Window</div><div class="loan-box-row"><span>Date</span><span>Saturday, October 28, 2026</span></div><div class="loan-box-row"><span>Time</span><span>2:00 AM — 4:00 AM EAT</span></div><div class="loan-box-row"><span>Duration</span><span>Approximately 2 hours</span></div></div><p>During this window, email access may be temporarily unavailable. All services will be restored by 4 AM. No action is required from staff.</p><p>IT Support<br/>Switch Microfinance Ltd</p>'},
+  {id:8,sender:'Collin Joseph',email:'collin.joseph@switchmicrofinance.co.tz',subject:'Quarterly Board Meeting — Agenda',preview:'The Q4 board meeting is scheduled for November 8. Please review the attached agenda and come prepared...',time:'Oct 20',date:'Oct 20',unread:false,starred:true,body:'<p>Dear management team,</p><p>The Q4 2026 board meeting is scheduled for <strong>November 8, 2026 at 10:00 AM</strong> at the Mbeya Main office.</p><h3>Proposed Agenda</h3><ul><li>Portfolio performance review (Oct — Dec)</li><li>Branch expansion update</li><li>2027 strategic plan and budget</li><li>Staffing and hiring decisions</li><li>Risk and compliance report</li></ul><p>Please prepare your department reports and submit them by November 5. Each presentation should be no longer than 15 minutes.</p><p>Collin Joseph<br/>CEO / MD</p>'},
+  {id:9,sender:'Tanzania Revenue Authority',email:'noreply@tra.go.tz',subject:'Tax Compliance Reminder — Q3 Filing',preview:'This is a reminder that Q3 tax filings are due by October 31. Please ensure all documentation is submitted...',time:'Oct 19',date:'Oct 19',unread:false,starred:false,body:'<p>Tax compliance reminder from the Tanzania Revenue Authority.</p><p>This is an automated reminder that your Q3 2026 tax filings are due by <strong>October 31, 2026</strong>.</p><p>Please ensure all PAYE, SDL, and VAT documentation is submitted through the e-filing portal before the deadline to avoid penalties.</p><p>Tanzania Revenue Authority<br/>This is an automated message — do not reply.</p>'},
+  {id:10,sender:'Bank of Tanzania',email:'communications@bot.go.tz',subject:'Microfinance Regulatory Update — New Guidelines',preview:'The Bank of Tanzania has issued updated microfinance regulatory guidelines effective January 2027...',time:'Oct 18',date:'Oct 18',unread:false,starred:false,body:'<p>The Bank of Tanzania has issued updated regulatory guidelines for licensed microfinance institutions.</p><h3>Key Updates (Effective January 1, 2027)</h3><ul><li>Increased minimum capital requirements</li><li>Enhanced consumer protection standards</li><li>New reporting frequency for portfolio quality metrics</li><li>Updated KYC and AML compliance requirements</li></ul><p>All licensed microfinance institutions are required to review and align their operations with the new guidelines before the effective date.</p><p>Bank of Tanzania<br/>Financial Sector Regulation Department</p>'},
+  {id:11,sender:'Amina Mollel',email:'amina.mollel@switchmicrofinance.co.tz',subject:'Customer Feedback — Positive Response from Group Meeting',preview:'Had a great community meeting in Soko Matola today. 15 potential clients expressed interest in our micro-loan products...',time:'Oct 17',date:'Oct 17',unread:false,starred:false,body:'<p>Hi team,</p><p>I had a very productive community meeting in Soko Matola today. About 30 community members attended and I presented our loan and savings products.</p><p><strong>15 potential clients</strong> expressed interest in applying for micro-loans. I have collected their contact information and will follow up individually next week.</p><p>The community is very receptive to our services, particularly the farmer finance and business support products. This is a great opportunity for growth in Q4.</p><p>Amina Mollel<br/>Branch Manager, Mbeya Main</p>'},
+  {id:12,sender:'Masaa24 Networks',email:'support@masaa24.com',subject:'Your Webmail Service — Monthly Update',preview:'Your webmail service is running smoothly. No downtime reported this month. New spam filtering features added...',time:'Oct 16',date:'Oct 16',unread:false,starred:false,body:'<p>Hello Switch Microfinance team,</p><p>Your monthly webmail service update from Masaa24 Networks.</p><div class="loan-box"><div class="loan-box-title">Service Status — October 2026</div><div class="loan-box-row"><span>Uptime</span><span>99.98%</span></div><div class="loan-box-row"><span>Downtime</span><span>0 minutes</span></div><div class="loan-box-row"><span>Emails Sent</span><span>1,842</span></div><div class="loan-box-row"><span>Emails Received</span><span>3,561</span></div><div class="loan-box-row"><span>Spam Filtered</span><span>412 (11.6%)</span></div></div><p>We have also added improved spam filtering features and calendar sync support. Your service is running at optimal performance.</p><p>Thank you for choosing Masaa24 Networks.<br/>Support: support@masaa24.com</p>'},
+];
+
+var currentUser=null;
+var selectedEmailId=null;
+var activeFolder='inbox';
+
+function getInitials(name){
+  var parts=name.trim().split(' ');
+  return((parts[0]||'')[0]||'')+((parts[1]||'')[0]||'');
+}
+function getColorForSender(sender){
+  var hash=0;
+  for(var i=0;i<sender.length;i++)hash=((hash<<5)-hash)+sender.charCodeAt(i);
+  return colors[Math.abs(hash)%colors.length];
+}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function renderEmailList(){
+  var list=document.getElementById('emailList');
+  var searchVal=(document.getElementById('searchInput').value||'').toLowerCase();
+  var filtered=mockEmails.filter(function(e){
+    if(searchVal){
+      return(e.sender+e.subject+e.preview).toLowerCase().indexOf(searchVal)>=0;
+    }
+    return true;
+  });
+  if(filtered.length===0){
+    list.innerHTML='<div style="padding:60px;text-align:center;color:var(--gray-4);font-size:14px">No emails found</div>';
+    return;
+  }
+  list.innerHTML=filtered.map(function(e){
+    var color=getColorForSender(e.sender);
+    var isSelected=e.id===selectedEmailId;
+    var classes=['email-row'];
+    if(e.unread)classes.push('unread');
+    if(isSelected)classes.push('selected');
+    return '<div class="'+classes.join(' ')+'" data-id="'+e.id+'" onclick="selectEmail('+e.id+')">'+
+      '<input type="checkbox" class="email-check" onclick="event.stopPropagation()" />'+
+      '<div class="email-avatar" style="background:'+color+'">'+getInitials(e.sender)+'</div>'+
+      '<div class="email-content">'+
+        '<div class="email-top">'+
+          '<span class="email-sender">'+escapeHtml(e.sender)+'</span>'+
+          '<span class="email-time">'+e.time+'</span>'+
+        '</div>'+
+        '<div class="email-subject">'+escapeHtml(e.subject)+'</div>'+
+        '<div class="email-preview">'+escapeHtml(e.preview)+'</div>'+
+        '<div class="email-badges">'+
+          (e.unread?'<span class="badge-new">NEW</span>':'')+
+          (e.starred?'<span class="badge-star"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  document.getElementById('toolbarCount').textContent='1–'+filtered.length+' of '+filtered.length;
+}
+
+function selectEmail(id){
+  selectedEmailId=id;
+  var email=mockEmails.find(function(e){return e.id===id;});
+  if(!email)return;
+  email.unread=false;
+  updateInboxCount();
+  renderEmailList();
+  var empty=document.getElementById('readEmpty');
+  var content=document.getElementById('readContent');
+  empty.style.display='none';
+  content.style.display='flex';
+  content.style.flexDirection='column';
+  content.style.flex='1';
+  var color=getColorForSender(email.sender);
+  content.innerHTML=
+    '<div class="read-header">'+
+      '<div class="read-subject">'+escapeHtml(email.subject)+'</div>'+
+      '<div class="read-meta">'+
+        '<div class="read-avatar" style="background:'+color+'">'+getInitials(email.sender)+'</div>'+
+        '<div class="read-info">'+
+          '<div class="read-from">'+escapeHtml(email.sender)+'</div>'+
+          '<div class="read-to">&lt;'+email.email+'&gt;</div>'+
+          '<div class="read-to">to me</div>'+
+        '</div>'+
+        '<div class="read-time">'+email.date+', '+email.time+'</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="read-body">'+email.body+'</div>'+
+    '<div class="read-actions">'+
+      '<button class="read-action-btn" onclick="replyEmail('+id+')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z" fill="currentColor"/></svg>Reply</button>'+
+      '<button class="read-action-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z" fill="currentColor"/></svg>Forward</button>'+
+    '</div>';
+  if(window.innerWidth<=1024){
+    document.getElementById('readPane').classList.add('show-mobile');
+  }
+}
+
+function updateInboxCount(){
+  var count=mockEmails.filter(function(e){return e.unread;}).length;
+  var el=document.getElementById('inboxCount');
+  el.textContent=count;
+  el.style.display=count>0?'inline':'none';
+}
+
+function closeReadPaneMobile(){
+  document.getElementById('readPane').classList.remove('show-mobile');
+}
+
+function replyEmail(id){
+  var email=mockEmails.find(function(e){return e.id===id;});
+  if(!email)return;
+  openCompose(email.email,'Re: '+email.subject);
+}
+
+function openCompose(to,subject){
+  var existing=document.getElementById('composeModal');
+  if(existing)existing.remove();
+  var modal=document.createElement('div');
+  modal.className='compose-overlay';
+  modal.id='composeModal';
+  modal.innerHTML=
+    '<div class="compose-header">'+
+      '<span class="compose-title">New Message</span>'+
+      '<div class="compose-actions">'+
+        '<button title="Minimize"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 19h12v2H6z" fill="currentColor"/></svg></button>'+
+        '<button title="Close" onclick="closeCompose()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></svg></button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="compose-field"><input type="text" id="composeTo" placeholder="To" value="'+(to||'')+'" /></div>'+
+    '<div class="compose-field"><input type="text" id="composeSubject" placeholder="Subject" value="'+(subject||'')+'" /></div>'+
+    '<div class="compose-body"><textarea id="composeTextArea" placeholder="Write your message..."></textarea></div>'+
+    '<div class="compose-footer">'+
+      '<button class="compose-send" id="composeSend">Send</button>'+
+      '<button class="icon" title="Attach"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16.5 6v11.5a4 4 0 11-8 0V5a2.5 2.5 0 015 0v10.5a1 1 0 11-2 0V6H10v9.5a2.5 2.5 0 005 0V5a4 4 0 00-8 0v12.5a5.5 5.5 0 0011 0V6h-1.5z" fill="currentColor"/></svg></button>'+
+      '<button class="icon" title="Insert link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.9 12a3.1 3.1 0 013.1-3.1h4V7H7a5 5 0 000 10h4v-1.9H7a3.1 3.1 0 01-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4a3.1 3.1 0 010 6.2h-4V17h4a5 5 0 000-10z" fill="currentColor"/></svg></button>'+
+    '</div>';
+  document.body.appendChild(modal);
+  document.getElementById('composeSend').onclick=function(){
+    var toVal=document.getElementById('composeTo').value.trim();
+    if(!toVal){alert('Please enter a recipient.');return;}
+    var subj=document.getElementById('composeSubject').value.trim();
+    var body=document.getElementById('composeTextArea').value.trim();
+    if(!currentUser){alert('Please sign in again.');return;}
+    var sendButton=document.getElementById('composeSend');
+    sendButton.disabled=true;
+    sendButton.textContent='Sending…';
+    mailRequest('send',{email:currentUser.email,password:currentUser.password,to:toVal,subject:subj,text:body}).then(function(){closeCompose();}).catch(function(err){alert('Could not send message. '+err.message);sendButton.disabled=false;sendButton.textContent='Send';});
+  };
+}
+
+function closeCompose(){
+  var m=document.getElementById('composeModal');
+  if(m)m.remove();
+}
+
+function mailRequest(action, payload){
+  return fetch(MAIL_API_URL,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY},body:JSON.stringify(Object.assign({action:action},payload))}).then(function(res){return res.json().then(function(data){if(!res.ok)throw new Error(data.error||'Mail service unavailable.');return data;});});
+}
+function attemptRoundcubeLogin(user,pass,cb){
+  mailRequest('login',{email:user,password:pass}).then(function(data){cb({success:true,email:data.email||user});}).catch(function(err){cb({success:false,error:err.message});});
+}
+function loadInbox(){
+  return mailRequest('inbox',{email:currentUser.email,password:currentUser.password}).then(function(data){
+    mockEmails=Array.isArray(data.messages)?data.messages:[];
+    renderEmailList();
+    updateInboxCount();
+  });
+}
+
+function showApp(email,password){
+  currentUser={email:email,password:password};
+  document.getElementById('signedEmail').textContent=email;
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').classList.add('show');
+  document.getElementById('emailList').innerHTML='<div style="padding:60px;text-align:center;color:var(--gray-4);font-size:14px">Loading inbox…</div>';
+  loadInbox().catch(function(err){document.getElementById('emailList').innerHTML='<div style="padding:60px;text-align:center;color:#C5221F;font-size:14px">'+escapeHtml(err.message)+'</div>';});
+}
+
+function showLogin(){
+  document.getElementById('login').style.display='flex';
+  document.getElementById('app').classList.remove('show');
+}
+
+document.getElementById('loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var email=document.getElementById('loginEmail').value.trim();
+  var pass=document.getElementById('loginPass').value;
+  var errEl=document.getElementById('loginError');
+  var btn=document.getElementById('loginBtn');
+  errEl.classList.remove('show');
+  btn.disabled=true;
+  btn.textContent='Signing in...';
+  var timedOut=false;
+  var timer=setTimeout(function(){
+    timedOut=true;
+    btn.disabled=false;
+    btn.textContent='Sign In';
+    errEl.textContent='The mail server is taking too long to respond. It may be unreachable from this service. Please try again in a moment.';
+    errEl.classList.add('show');
+  },12000);
+  attemptRoundcubeLogin(email,pass,function(result){
+    if(timedOut)return;
+    clearTimeout(timer);
+    btn.disabled=false;
+    btn.textContent='Sign In';
+    if(result.success){
+      showApp(result.email||email,pass);
+    }else{
+      errEl.textContent='Could not sign in. '+((result.error||'')||'Check your credentials.');
+      errEl.classList.add('show');
+    }
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input',renderEmailList);
+document.getElementById('composeBtn').addEventListener('click',function(){openCompose();});
+document.getElementById('fabCompose').addEventListener('click',function(){openCompose();});
+
+document.querySelectorAll('.nav-item[data-folder]').forEach(function(item){
+  item.addEventListener('click',function(){
+    document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+    item.classList.add('active');
+    activeFolder=item.dataset.folder;
+  });
+});
+
+if(window.innerWidth<=1024){
+  document.getElementById('readEmpty').addEventListener('click',closeReadPaneMobile);
+}
+
+try{localStorage.removeItem('switchmail_user');}catch(e){}
+
+if(!DEMO_MODE){
+  document.getElementById('modeBadge').style.display='none';
+}else{
+  document.getElementById('modeBadge').style.display='block';
+}
+</script>
+</body>
+</html>
